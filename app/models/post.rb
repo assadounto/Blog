@@ -1,13 +1,12 @@
 class Post < ApplicationRecord
   validates :title, presence: true, length: { maximum: 250 }
-  validates :comments_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :likes_counter, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
-  has_many :likes
-  has_many :comments
+  has_many :likes, dependent: :destroy
+  has_many :comments, counter_cache: :comments_counter, dependent: :destroy
   belongs_to :user, foreign_key: 'user_id'
-  def update_post_count(count)
-    user.update_attribute 'posts_counter', count
+  after_save :update_post_count
+  def update_post_count
+    user.update_attribute 'post_counter', user.posts.length
   end
 
   def recent_comments

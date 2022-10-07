@@ -1,0 +1,11 @@
+
+<div>
+<%=link_to user_post_path(@user,post)  do %>
+<div class ="posts-cont">
+    <h2><%=post.title %></h2>
+    <p><%=post.text[0..14]...%></p>
+   <div class="comment-likes">comments: <%=post.comments.size %> likes: <%=post.likes_counter%></div>
+</div>
+</div>
+<% end %>
+
